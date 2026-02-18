@@ -1,0 +1,14 @@
+# Go 编译产物
+bin/
+jetson-rs-middleware
+go.sum
+
+# CGO 动态库与中间文件
+*.so
+*.a
+*.o
+
+# 系统与编辑器配置
+.vscode/
+.idea/
+.DS_Store
