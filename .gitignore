@@ -4,7 +4,6 @@ jetson-rs-middleware
 go.sum
 
 # CGO 动态库与中间文件
-*.so
 *.a
 *.o
 
@@ -12,3 +11,7 @@ go.sum
 .vscode/
 .idea/
 .DS_Store
+# --- 核心设置 ---
+# 确保 lib 文件夹及其内容永远不被忽略
+!lib/
+!lib/**

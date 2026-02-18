@@ -15,7 +15,9 @@ Plaintext
 go-realsense/  
 ├── go.mod                  \# 模块定义 (github.com/jojo/go-realsense)  
 ├── Makefile                \# 编译指令（处理 ARM64 交叉编译与 CGO 链接）  
-├── scripts/  
+├── lib/                    \# 连接库
+│   └── librealsense2.so    \# 动态链接库 (librealsense2)  
+├── scripts/                \# 脚本工具  
 │   └── install-deps.sh     \# Jetson 环境依赖安装脚本  
 ├── rs/                     \# 核心封装包 (package rs)  
 │   ├── rs.go               \# CGO 基础配置、头文件引入、全局类型  
