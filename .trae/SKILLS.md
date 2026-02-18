@@ -112,6 +112,4 @@ go-realsense/
 * **CGO 内存管理**：rs2\_frame 是由 C 分配的。在 Go 中必须手动调用 C.rs2\_release\_frame，否则在 Jetson Orin 上运行半小时就会因为内存泄漏导致系统 OOM 崩溃。  
 * **统一内存优化**：利用 Jetson 的物理内存特性，尽量减少 C.GoBytes 的大拷贝。在做 ROI 计算时，直接通过 unsafe.Pointer 访问 C 内存块。  
 * **指令集优化**：在编译时，确保开启针对 Cortex-A78AE (Orin CPU) 的优化标志。
-
  
-
