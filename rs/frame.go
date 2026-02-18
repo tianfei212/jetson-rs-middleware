@@ -1,8 +1,6 @@
 package rs
 
 /*
-#cgo CFLAGS: -I/usr/include
-#cgo LDFLAGS: -L${SRCDIR}/../lib -lrealsense2
 #include <librealsense2/rs.h>
 */
 import "C"
