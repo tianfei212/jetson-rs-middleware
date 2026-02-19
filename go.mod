@@ -1,4 +1,4 @@
-module github.com/jojo/jetson-rs-middleware
+module github.com/tianfei212/jetson-rs-middleware
 
 go 1.26.0
 

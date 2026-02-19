@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/jojo/jetson-rs-middleware/rs"
+	"github.com/tianfei212/jetson-rs-middleware/rs"
 )
 
 func main() {

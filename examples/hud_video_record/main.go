@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jojo/jetson-rs-middleware/rs"
+	"github.com/tianfei212/jetson-rs-middleware/rs"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
 	"golang.org/x/image/math/fixed"

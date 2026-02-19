@@ -64,6 +64,26 @@ func (f *Frame) GetDepthData() []uint16 {
 	return slice
 }
 
+// GetWidth 获取帧宽度
+func (f *Frame) GetWidth() int {
+	var err *C.rs2_error
+	w := C.rs2_get_frame_width(f.ptr, &err)
+	if checkError(err) != nil {
+		return 0
+	}
+	return int(w)
+}
+
+// GetHeight 获取帧高度
+func (f *Frame) GetHeight() int {
+	var err *C.rs2_error
+	h := C.rs2_get_frame_height(f.ptr, &err)
+	if checkError(err) != nil {
+		return 0
+	}
+	return int(h)
+}
+
 // GetTimestamp 获取帧的硬件时间戳（毫秒）
 func (f *Frame) GetTimestamp() (float64, error) {
 	var err *C.rs2_error
@@ -149,4 +169,14 @@ func (fs *FrameSet) Close() {
 		C.rs2_release_frame(fs.ptr)
 		fs.ptr = nil
 	}
+}
+
+// GetDepthFrame 获取深度帧的快捷方法
+func (fs *FrameSet) GetDepthFrame() (*Frame, error) {
+	return fs.GetFrame(StreamDepth)
+}
+
+// GetColorFrame 获取彩色帧的快捷方法
+func (fs *FrameSet) GetColorFrame() (*Frame, error) {
+	return fs.GetFrame(StreamColor)
 }
