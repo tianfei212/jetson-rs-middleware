@@ -51,6 +51,27 @@ jetson-rs-middleware/
 
 ---
 
+## 📦 独立共享库 (Shared Library)
+
+**版本**: v1.0.1-20260219
+
+本分支 (`lib`) 提供了将中间件编译为独立 `.so` 共享库的能力，以便于 C/C++ 或其他语言调用。
+
+### 编译方法
+```bash
+make build-so
+```
+产物将生成在 `build/` 目录下：
+*   `libjetson_middleware.so`: 核心中间件库
+*   `libjetson_middleware.h`: 对应的 C 头文件
+
+### ⚠️ 重要说明
+生成的 `libjetson_middleware.so` **不包含**底层的 RealSense 驱动实现。因此，在部署或运行时，**必须**确保 `lib/librealsense2.so` 文件与生成的库文件存在于同一目录，或在系统的库搜索路径 (`LD_LIBRARY_PATH`) 中。
+
+这是为了保持中间件的轻量化，并允许灵活替换底层的 RealSense SDK 版本。
+
+---
+
 ## 🚀 快速开始
 
 ### 1. 环境要求

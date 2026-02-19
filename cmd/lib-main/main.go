@@ -1,5 +1,8 @@
 package main
 
+// Version defines the current version of the shared library
+const Version = "v1.0.1-20260219"
+
 /*
 #include <stdint.h>
 #include <stdlib.h>
