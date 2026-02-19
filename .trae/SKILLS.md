@@ -47,8 +47,13 @@ go-realsense/
 * **func (c \*Config) EnableStream(stype StreamType, w, h, fps int) error**  
   * **输入**：stype (Color/Depth), w/h (像素), fps (帧率)。  
   * **输出**：error。  
-* **func (p \*Pipeline) Start(cfg \*Config) error**  
+* **func (p *Pipeline) Start(cfg *Config) error**  
   * **功能**：启动 D455 硬件流。
+* **func (p *Pipeline) WaitForFrames(timeout uint) (*FrameSet, error)**
+  * **输入**：timeout (毫秒)。
+  * **输出**：FrameSet (包含彩色和深度帧的集合)。
+* **func (p *Pipeline) Stop()**
+  * **功能**：停止相机流。
 
 ### **B. 空间对齐 (Alignment) —— ROI 核心**
 

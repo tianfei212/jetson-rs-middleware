@@ -43,7 +43,7 @@ func NewAlign(alignTo C.rs2_stream) (*Align, error) {
 }
 
 // Process 处理并对齐帧集
-func (a *Align) Process(frames *Frame) (*Frame, error) {
+func (a *Align) Process(frames *FrameSet) (*FrameSet, error) {
 	var err *C.rs2_error
 
 	// 增加引用计数，因为 rs2_process_frame 会接管所有权
@@ -67,7 +67,7 @@ func (a *Align) Process(frames *Frame) (*Frame, error) {
 	}
 
 	// 此时 result 是一个新的 frame 引用（通常是一个 frameset）
-	return &Frame{ptr: result}, nil
+	return &FrameSet{ptr: result}, nil
 }
 
 // Close 释放对齐处理器的内存
@@ -83,7 +83,7 @@ func (a *Align) Close() {
 }
 
 // GetSceneFrame 这是一个辅助函数，帮助从对齐后的帧集中提取特定流
-func (f *Frame) GetSceneFrame(stream C.rs2_stream) (*Frame, error) {
+func (f *FrameSet) GetSceneFrame(stream C.rs2_stream) (*Frame, error) {
 	var err *C.rs2_error
 
 	// 从对齐后的帧集中提取单个流的帧
