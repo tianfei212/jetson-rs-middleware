@@ -1,8 +1,5 @@
 package main
 
-// Version defines the current version of the shared library
-const Version = "v1.0.1-20260219"
-
 /*
 #include <stdint.h>
 #include <stdlib.h>
@@ -30,6 +27,9 @@ import (
 
 	"github.com/tianfei212/jetson-rs-middleware/rs"
 )
+
+// Version defines the current version of the shared library
+const Version = "v1.0.1-20260219"
 
 // 全局变量保持引用，防止 GC
 var (
