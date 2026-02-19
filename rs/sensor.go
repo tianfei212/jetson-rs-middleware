@@ -10,13 +10,16 @@ import "unsafe"
 
 // 传感器选项常量
 const (
-	OptionExposure           = C.RS2_OPTION_EXPOSURE
-	OptionGain               = C.RS2_OPTION_GAIN
-	OptionLaserPower         = C.RS2_OPTION_LASER_POWER
-	OptionEnableAutoExposure = C.RS2_OPTION_ENABLE_AUTO_EXPOSURE
-	OptionFilterMagnitude    = C.RS2_OPTION_FILTER_MAGNITUDE
-	OptionHolesFill          = C.RS2_OPTION_HOLES_FILL
-	OptionVisualPreset       = C.RS2_OPTION_VISUAL_PRESET
+	OptionExposure             = C.RS2_OPTION_EXPOSURE
+	OptionGain                 = C.RS2_OPTION_GAIN
+	OptionLaserPower           = C.RS2_OPTION_LASER_POWER
+	OptionEnableAutoExposure   = C.RS2_OPTION_ENABLE_AUTO_EXPOSURE
+	OptionFilterMagnitude      = C.RS2_OPTION_FILTER_MAGNITUDE
+	OptionHolesFill            = C.RS2_OPTION_HOLES_FILL
+	OptionVisualPreset         = C.RS2_OPTION_VISUAL_PRESET
+	OptionAsicTemperature      = C.RS2_OPTION_ASIC_TEMPERATURE
+	OptionProjectorTemperature = C.RS2_OPTION_PROJECTOR_TEMPERATURE
+	OptionInterCamSyncMode     = C.RS2_OPTION_INTER_CAM_SYNC_MODE
 )
 
 // GetDepthScale 获取深度传感器的缩放比例

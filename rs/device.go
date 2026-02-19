@@ -8,7 +8,56 @@ package rs
 #include <stdlib.h>
 */
 import "C"
-import "fmt"
+import (
+	"fmt"
+)
+
+// CameraInfo 封装了 RS2_CAMERA_INFO_* 常量
+type CameraInfo int
+
+const (
+	CameraInfoName                CameraInfo = C.RS2_CAMERA_INFO_NAME
+	CameraInfoSerialNumber        CameraInfo = C.RS2_CAMERA_INFO_SERIAL_NUMBER
+	CameraInfoFirmwareVersion     CameraInfo = C.RS2_CAMERA_INFO_FIRMWARE_VERSION
+	CameraInfoRecommendedFirmware CameraInfo = C.RS2_CAMERA_INFO_RECOMMENDED_FIRMWARE_VERSION
+	CameraInfoPhysicalPort        CameraInfo = C.RS2_CAMERA_INFO_PHYSICAL_PORT
+	CameraInfoDebugOpCode         CameraInfo = C.RS2_CAMERA_INFO_DEBUG_OP_CODE
+	CameraInfoAdvancedMode        CameraInfo = C.RS2_CAMERA_INFO_ADVANCED_MODE
+	CameraInfoProductId           CameraInfo = C.RS2_CAMERA_INFO_PRODUCT_ID
+	CameraInfoCameraLocked        CameraInfo = C.RS2_CAMERA_INFO_CAMERA_LOCKED
+	CameraInfoUsbTypeDescriptor   CameraInfo = C.RS2_CAMERA_INFO_USB_TYPE_DESCRIPTOR
+	CameraInfoProductLine         CameraInfo = C.RS2_CAMERA_INFO_PRODUCT_LINE
+	CameraInfoAsicSerialNumber    CameraInfo = C.RS2_CAMERA_INFO_ASIC_SERIAL_NUMBER
+	CameraInfoFirmwareUpdateId    CameraInfo = C.RS2_CAMERA_INFO_FIRMWARE_UPDATE_ID
+)
+
+// GetInfo 获取设备的特定信息字符串
+// info: CameraInfo 枚举值，如 CameraInfoSerialNumber
+func (d *Device) GetInfo(info CameraInfo) (string, error) {
+	var err *C.rs2_error
+
+	// 检查是否支持该信息查询
+	if C.rs2_supports_device_info(d.ptr, C.rs2_camera_info(info), &err) == 0 {
+		return "", fmt.Errorf("device info %d not supported", info)
+	}
+
+	val := C.rs2_get_device_info(d.ptr, C.rs2_camera_info(info), &err)
+	if err != nil {
+		return "", errorFromC(err)
+	}
+
+	return C.GoString(val), nil
+}
+
+// GetUSBTypeDescriptor 获取 USB 类型描述符 (例如 "3.2" 或 "2.1")
+func (d *Device) GetUSBTypeDescriptor() (string, error) {
+	return d.GetInfo(CameraInfoUsbTypeDescriptor)
+}
+
+// GetPhysicalPort 获取 USB 物理端口路径
+func (d *Device) GetPhysicalPort() (string, error) {
+	return d.GetInfo(CameraInfoPhysicalPort)
+}
 
 // GetDevice 从管道获取当前活动的设备
 // 通常在 pipeline.Start() 之后调用，用于获取硬件参数
