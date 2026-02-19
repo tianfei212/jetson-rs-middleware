@@ -29,6 +29,16 @@ type Frame struct {
 	ptr *C.rs2_frame
 }
 
+// Device 封装了 rs2_device 结构
+type Device struct {
+	ptr *C.rs2_device
+}
+
+// Sensor 封装了 rs2_sensor 结构
+type Sensor struct {
+	ptr *C.rs2_sensor
+}
+
 // StreamType 映射 C 的流类型
 type StreamType int
 
