@@ -8,9 +8,7 @@ package rs
 #include <stdlib.h>
 */
 import "C"
-import (
-	"fmt"
-)
+import "fmt"
 
 // GetDevice 从管道获取当前活动的设备
 // 通常在 pipeline.Start() 之后调用，用于获取硬件参数
@@ -32,44 +30,68 @@ func (p *Pipeline) GetDevice() (*Device, error) {
 	return &Device{ptr: dev}, nil
 }
 
-// GetDepthScale 获取深度传感器的缩放比例
-// D455 通常返回 0.001，意味着数值 1000 代表 1米
-func (d *Device) GetDepthScale() (float32, error) {
+// GetSensors 获取设备的所有传感器
+// 注意：返回的 Sensor 切片中的每个元素都需要手动 Close
+func (d *Device) GetSensors() ([]*Sensor, error) {
 	var err *C.rs2_error
 
-	// 1. 查询设备上的所有传感器
-	sensors := C.rs2_query_sensors(d.ptr, &err)
+	// 1. 查询设备上的所有传感器列表
+	sensorsList := C.rs2_query_sensors(d.ptr, &err)
 	if err != nil {
-		return 0, errorFromC(err)
+		return nil, errorFromC(err)
 	}
-	defer C.rs2_delete_sensor_list(sensors)
+	defer C.rs2_delete_sensor_list(sensorsList)
 
-	count := int(C.rs2_get_sensors_count(sensors, &err))
+	count := int(C.rs2_get_sensors_count(sensorsList, &err))
 	if err != nil {
-		return 0, errorFromC(err)
+		return nil, errorFromC(err)
 	}
 
-	// 2. 遍历传感器寻找深度传感器
+	var sensors []*Sensor
 	for i := 0; i < count; i++ {
-		sensorPtr := C.rs2_create_sensor(sensors, C.int(i), &err)
+		// 创建传感器对象
+		sensorPtr := C.rs2_create_sensor(sensorsList, C.int(i), &err)
 		if err != nil {
-			continue
-		}
-
-		// 检查该传感器是否支持深度缩放
-		// 在 C API 中，这通常通过检查传感器是否能提供深度流来判断
-		if C.rs2_is_sensor_extendable_to(sensorPtr, C.RS2_EXTENSION_DEPTH_SENSOR, &err) != 0 {
-			scale := C.rs2_get_depth_scale(sensorPtr, &err)
-			C.rs2_delete_sensor(sensorPtr) // 及时释放
-			if err != nil {
-				return 0, errorFromC(err)
+			// 如果出错，清理已创建的传感器
+			for _, s := range sensors {
+				s.Close()
 			}
-			return float32(scale), nil
+			return nil, errorFromC(err)
 		}
-		C.rs2_delete_sensor(sensorPtr)
+		sensors = append(sensors, &Sensor{ptr: sensorPtr})
 	}
 
-	return 0, fmt.Errorf("未在设备中找到深度传感器")
+	return sensors, nil
+}
+
+// GetDepthSensor 获取第一个深度传感器
+// 这是一个便捷函数，用于快速获取深度传感器进行控制
+func (d *Device) GetDepthSensor() (*Sensor, error) {
+	sensors, err := d.GetSensors()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, s := range sensors {
+		var err *C.rs2_error
+		// 检查是否支持深度扩展
+		if C.rs2_is_sensor_extendable_to(s.ptr, C.RS2_EXTENSION_DEPTH_SENSOR, &err) != 0 {
+			// 找到了深度传感器
+			// 释放其他传感器
+			for _, other := range sensors {
+				if other != s {
+					other.Close()
+				}
+			}
+			return s, nil
+		}
+	}
+
+	// 没找到，清理所有
+	for _, s := range sensors {
+		s.Close()
+	}
+	return nil, fmt.Errorf("depth sensor not found")
 }
 
 // Close 释放设备资源

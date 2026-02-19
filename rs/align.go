@@ -15,11 +15,11 @@ type Align struct {
 }
 
 // NewAlign 创建一个新的对齐处理器
-// alignTo 参数指定对齐的基准流，通常是 RS2_STREAM_COLOR (彩色图)
-func NewAlign(alignTo C.rs2_stream) (*Align, error) {
+// alignTo 参数指定对齐的基准流，通常是 StreamColor (彩色图)
+func NewAlign(alignTo StreamType) (*Align, error) {
 	var err *C.rs2_error
 	// 创建对齐处理块
-	ptr := C.rs2_create_align(alignTo, &err)
+	ptr := C.rs2_create_align(C.rs2_stream(alignTo), &err)
 	if err != nil {
 		return nil, errorFromC(err)
 	}
