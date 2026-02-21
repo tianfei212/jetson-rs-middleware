@@ -22,6 +22,33 @@ const (
 	OptionInterCamSyncMode     = C.RS2_OPTION_INTER_CAM_SYNC_MODE
 )
 
+// VisualPreset 定义 D400 系列相机的视觉预设模式
+type VisualPreset int
+
+const (
+	VisualPresetCustom          VisualPreset = C.RS2_RS400_VISUAL_PRESET_CUSTOM
+	VisualPresetDefault         VisualPreset = C.RS2_RS400_VISUAL_PRESET_DEFAULT
+	VisualPresetHand            VisualPreset = C.RS2_RS400_VISUAL_PRESET_HAND
+	VisualPresetHighAccuracy    VisualPreset = C.RS2_RS400_VISUAL_PRESET_HIGH_ACCURACY
+	VisualPresetHighDensity     VisualPreset = C.RS2_RS400_VISUAL_PRESET_HIGH_DENSITY
+	VisualPresetMediumDensity   VisualPreset = C.RS2_RS400_VISUAL_PRESET_MEDIUM_DENSITY
+	VisualPresetRemoveIRPattern VisualPreset = C.RS2_RS400_VISUAL_PRESET_REMOVE_IR_PATTERN
+)
+
+// SetVisualPreset 设置视觉预设模式
+func (s *Sensor) SetVisualPreset(preset VisualPreset) error {
+	return s.SetOption(OptionVisualPreset, float32(preset))
+}
+
+// GetVisualPreset 获取当前视觉预设模式
+func (s *Sensor) GetVisualPreset() (VisualPreset, error) {
+	val, err := s.GetOption(OptionVisualPreset)
+	if err != nil {
+		return VisualPresetCustom, err
+	}
+	return VisualPreset(val), nil
+}
+
 // GetDepthScale 获取深度传感器的缩放比例
 // 仅对深度传感器有效
 func (s *Sensor) GetDepthScale() (float32, error) {
