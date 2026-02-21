@@ -29,7 +29,7 @@ import (
 )
 
 // Version defines the current version of the shared library
-const Version = "v1.0.1-20260219"
+const Version = "v1.0.1-20260221"
 
 // 全局变量保持引用，防止 GC
 var (

@@ -187,7 +187,28 @@ D455 的 RGB 摄像头和深度摄像头位置不同，导致图像视野不重�
     defer resultFrame.Close()
 ```
 
-### 3.4 硬件控制与遥测
+### 3.4 视觉预设 (Visual Preset)
+
+D400 系列相机支持多种视觉预设，以适应不同的环境（如高精度、高密度、手势识别等）。
+
+```go
+    // 获取深度传感器
+    sensor, _ := dev.GetDepthSensor()
+    defer sensor.Close()
+
+    // 设置为 "High Accuracy" 模式
+    // 可选值: VisualPresetDefault, VisualPresetHand, VisualPresetHighAccuracy, 
+    //        VisualPresetHighDensity, VisualPresetMediumDensity, etc.
+    if err := sensor.SetVisualPreset(rs.VisualPresetHighAccuracy); err != nil {
+        log.Printf("Failed to set preset: %v", err)
+    }
+
+    // 获取当前预设
+    preset, _ := sensor.GetVisualPreset()
+    fmt.Printf("Current Preset: %d\n", preset)
+```
+
+### 3.5 硬件控制与遥测
 
 ```go
     // 获取设备句柄
